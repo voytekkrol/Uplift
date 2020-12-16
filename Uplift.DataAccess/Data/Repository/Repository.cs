@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,34 +10,80 @@ namespace Uplift.DataAccess.Data.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        public void Add(T entity)
+        protected readonly DbContext Context;
+        internal DbSet<T> dbSet;
+
+        public Repository(DbContext context)
         {
-            throw new NotImplementedException();
+            Context = context;
+            this.dbSet = context.Set<T>();
         }
 
-        public T Get(int Id)
+        public void Add(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Add(entity);
+        }
+
+        public T Get(int id)
+        {
+            return dbSet.Find(id);
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            //include properties will be coma seperated
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+
+            return query.ToList();
+
         }
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+            //include properties will be coma seperated
+            if (includeProperties != null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            return query.FirstOrDefault();
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            T entityToRemove = dbSet.Find(id);
+            Remove(entityToRemove);
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
     }
 }
