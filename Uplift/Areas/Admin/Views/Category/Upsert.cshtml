@@ -37,21 +37,21 @@
                     <span asp-validation-for="DisplayOrder" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-control row">
-                <div class="col-8 offset-4">
-                    @if (Model.Id != 0)
-                    {
-                        //Edit button and back to list button
-                        <partial name="_EditAndBackToListButton" model="Model.Id"/>
-                    }
-                    else
-                    {
-                        //Create button and back to list button
-                        <partial name="_CreateAndBackToListButton" />
-                    }
-                </div>
+
+            <div class="col-8 offset-4">
+                @if (Model.Id != 0)
+                {
+                    //Edit button and back to list button
+                    <partial name="_EditAndBackToListButton" model="Model.Id" />
+                }
+                else
+                {
+                    //Create button and back to list button
+                    <partial name="_CreateAndBackToListButton" />
+                }
             </div>
         </div>
+    </div>
     </div>
 </form>
 
