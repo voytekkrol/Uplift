@@ -54,7 +54,7 @@ function Delete(url) {
             url: url,
             success: function (data) {
                 if (data.success) {
-                    ShowMessage(data.message);
+                    toastr.success(data.message);
                     dataTable.ajax.reload();
                 }
                 else {
@@ -66,5 +66,5 @@ function Delete(url) {
 }
 
 function ShowMessage(msg) {
-
+    
 }
