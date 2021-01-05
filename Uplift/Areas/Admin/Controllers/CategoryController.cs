@@ -23,6 +23,8 @@ namespace Uplift.Areas.Admin.Controllers
             return View();
         }
 
+        #region API CALLS
+
         public IActionResult Upsert(int? id)
         {
             Category category = new Category();
@@ -41,8 +43,6 @@ namespace Uplift.Areas.Admin.Controllers
             return View(category);
 
         }
-
-        #region API CALLS
 
         [HttpPost]
         [ValidateAntiForgeryToken]

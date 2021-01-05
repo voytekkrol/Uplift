@@ -41,6 +41,26 @@ namespace Uplift.Areas.Admin.Controllers
             return View(frequency);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Frequency frequency)
+        {
+            if (ModelState.IsValid)
+            {
+                if (frequency.Id == 0)
+                {
+                    _unitOfWork.Frequency.Add(frequency);
+                }
+                else
+                {
+                    _unitOfWork.Frequency.Update(frequency);
+                }
+                _unitOfWork.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(frequency);
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
