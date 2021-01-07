@@ -23,5 +23,13 @@ namespace Uplift.Areas.Admin.Controllers
         {
             return View();
         }
+
+        #region API Calls
+
+        public IActionResult GetAll()
+        {
+            return Json(new { data = _unitOfWork.Service.GetAll() });
+        }
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.Text;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Uplift.Models.ViewModels
 {
@@ -8,6 +9,7 @@ namespace Uplift.Models.ViewModels
     {
         public Service Service { get; set; }
 
-        public IEnumerable<SelectListItem> MyProperty { get; set; }
+        public IEnumerable<SelectListItem> CategoryList{ get; set; }
+        public IEnumerable<SelectListItem> FrequencyList { get; set; }
     }
 }
