@@ -48,7 +48,8 @@ namespace Uplift.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert() {
+        public IActionResult Upsert()
+        {
             if (ModelState.IsValid)
             {
                 string webRootPath = _hostEnviroment.WebRootPath;
@@ -64,7 +65,7 @@ namespace Uplift.Areas.Admin.Controllers
                     {
                         files[0].CopyTo(fileStreams);
                     }
-                    ServVM.Service.ImageUrl = @"images\services\" + fileName + extension;
+                    ServVM.Service.ImageUrl = @"\images\services\" + fileName + extension;
 
                     _unitOfWork.Service.Add(ServVM.Service);
                 }
@@ -98,6 +99,14 @@ namespace Uplift.Areas.Admin.Controllers
 
                     _unitOfWork.Service.Update(ServVM.Service);
                 }
+                _unitOfWork.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View(ServVM);
+
             }
         }
 
@@ -105,7 +114,7 @@ namespace Uplift.Areas.Admin.Controllers
 
         public IActionResult GetAll()
         {
-            return Json(new { data = _unitOfWork.Service.GetAll(includeProperties:"Category,Frequency") });
+            return Json(new { data = _unitOfWork.Service.GetAll(includeProperties: "Category,Frequency") });
         }
         #endregion
     }
