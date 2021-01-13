@@ -90,7 +90,7 @@ namespace Uplift.Areas.Admin.Controllers
                         {
                             files[0].CopyTo(fileStreams);
                         }
-                        ServVM.Service.ImageUrl = @"images\services\" + fileName + extension_new;
+                        ServVM.Service.ImageUrl = @"\images\services\" + fileName + extension_new;
                     }
                     else
                     {
@@ -105,9 +105,35 @@ namespace Uplift.Areas.Admin.Controllers
             }
             else
             {
+                ServVM.CategoryList = _unitOfWork.Category.GetCategoryListFromDropdown();
+                ServVM.FrequencyList = _unitOfWork.Frequency.GetFrequencyListFromDropdown();
                 return View(ServVM);
 
             }
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var serviceFromDb = _unitOfWork.Service.Get(id);
+            string webRootPath = _hostEnviroment.WebRootPath;
+            var imagePath = Path.Combine(webRootPath, serviceFromDb.ImageUrl.TrimStart('\\'));
+
+            if (System.IO.File.Exists(imagePath))
+            {
+                System.IO.File.Delete(imagePath);
+            }
+
+            if (serviceFromDb == null)
+            {
+                return Json(new { success = false, message = "Error while deleting." });
+            }
+
+            _unitOfWork.Service.Remove(serviceFromDb);
+            _unitOfWork.Save();
+
+            return Json(new { success = true, message = "Deleting successfully." });
+
         }
 
         #region API Calls
