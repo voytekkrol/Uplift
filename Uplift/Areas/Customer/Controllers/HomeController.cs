@@ -5,23 +5,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Uplift.DataAccess.Data.Repository.IRepository;
 using Uplift.Models;
+using Uplift.Models.ViewModels;
 
 namespace Uplift.Controllers
 {
     [Area("Customer")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWOrk;
+        private HomeVM HomeVM;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
+            _unitOfWOrk = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            HomeVM = new HomeVM()
+            {
+                CategoryList = _unitOfWOrk.Category.GetAll(),
+                ServiceList = _unitOfWOrk.Service.GetAll(includeProperties:"Frequency")
+            };
+
+            return View(HomeVM);
         }
 
         public IActionResult Privacy()
