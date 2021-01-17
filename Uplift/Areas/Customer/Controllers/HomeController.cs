@@ -35,8 +35,13 @@ namespace Uplift.Controllers
 
         public IActionResult Details(int id)
         {
-            var serviceFromDb = _unitOfWOrk.Category.GetFirstOrDefault(includeProperties: "Category,Frequency", filter: c => c.Id == id);
+            var serviceFromDb = _unitOfWOrk.Service.GetFirstOrDefault(includeProperties:"Category,Frequency", filter: c => c.Id == id);
             return View(serviceFromDb);
+        }
+
+        public IActionResult AddToCart(int serviceId)
+        {
+            List<int> sessionList = new List<int>();
         }
 
         public IActionResult Privacy()
